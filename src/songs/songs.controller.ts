@@ -8,6 +8,8 @@ import {
   Body,
   HttpException,
   HttpStatus,
+  Param,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { SongsService } from './songs.service';
 import { CreateSongDTO } from './dto/create-song-dto';
@@ -36,8 +38,16 @@ export class SongsController {
   }
 
   @Get(':id')
-  findOne(): string {
-    return 'fetch song on the based on id';
+  findOne(
+    @Param(
+      'id',
+      new ParseIntPipe({
+        errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE,
+      }),
+    )
+    id: number,
+  ): string {
+    return `fetch song on the based on id ${typeof id}`;
   }
 
   @Put(':id')
